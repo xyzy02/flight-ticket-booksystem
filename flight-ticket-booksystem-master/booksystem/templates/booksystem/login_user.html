@@ -1,0 +1,30 @@
+{% extends 'booksystem/base2.html' %}
+{% block content %}
+<div class="container">
+    <div class="login-container">
+        <h2 class="text-center mb-4" style="color:hsl(64, 100%, 57%);">账号登录</h2>
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert" style="margin-bottom: 20px;">
+            {{ error_message }}
+        </div>
+        {% endif %}
+        <form id="loginForm" action="{% url 'booksystem:login_user' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">用户名:</label>
+                <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">密码:</label>
+                <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <div class="button-group" style="display: flex; gap: 30px; margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">登录</button>
+                <a href="{% url 'booksystem:register_user' %}" class="btn btn-outline-primary" style="background-color: #ff5722; border-color: #ff5722; color: #fff;">
+                    尚未拥有账号，前往注册页面
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

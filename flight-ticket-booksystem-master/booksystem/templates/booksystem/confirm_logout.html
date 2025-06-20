@@ -1,0 +1,32 @@
+{% extends 'booksystem/base.html' %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 100px">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">登出成功</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        <div style="font-size: 24px; margin: 30px 0">
+                            <i class="glyphicon glyphicon-log-out" style="color: #5cb85c; font-size: 36px"></i>
+                            <br><br>
+                            您已成功登出系统
+                        </div>
+                        
+                        <div style="margin-top: 30px">
+                            <a href="{% url 'booksystem:login_user' %}" class="btn btn-primary btn-lg">返回首页</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "{% url 'booksystem:login_user' %}";
+        }, 3000); // 3秒后自动跳转
+    </script>
+{% endblock %}

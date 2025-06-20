@@ -1,0 +1,64 @@
+{% extends 'booksystem/base.html' %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 30px">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" style="background: #f5f7fa; border-radius: 10px 10px 0 0; padding: 18px 28px; display: flex; align-items: center;">
+                        <span style="font-size: 1.8rem; color: #409eff; margin-right: 15px;">📄</span>
+                        <h3 class="panel-title" style="margin: 0; font-weight: 600; color: #333; letter-spacing: 2px;">我的订单记录</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% if tickets %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>处理编号</th>
+                                        <th>乘客</th>
+                                        <th>购票人</th>
+                                        <th>航班号</th>
+                                        <th>舱位等级</th>
+                                        <th>操作时间</th>
+                                        <th>成交价格</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ticket in tickets %}
+                                    <tr>
+                                        <td>{{ ticket.transaction_id }}</td>
+                                        <td>{{ ticket.passenger }}</td>
+                                        <td>{{ ticket.buyer }}</td>
+                                        <td>{{ ticket.flight_number }}</td>
+                                        <td>{{ ticket.get_cabin_class_display }}</td>
+                                        <td>{{ ticket.operation_date|date:"Y-m-d" }}</td>
+                                        <td>{{ ticket.transaction_price }}</td>
+                                        <td>
+                                            <form action="{% url 'booksystem:ticket_record' %}" method="post" style="display: inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="refund">
+                                                <input type="hidden" name="transaction_id" value="{{ ticket.transaction_id }}">
+                                                <button type="submit" class="btn btn-xs btn-danger" 
+                                                        onclick="return confirm('确定要退票吗？')">退票</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">暂无订单记录</div>
+                        {% endif %}
+                        
+                        <div class="text-center" style="margin-top: 20px">
+                            <a href="{% url 'booksystem:search' %}" class="btn btn-primary">返回查询页面</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

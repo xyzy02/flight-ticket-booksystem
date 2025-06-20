@@ -1,0 +1,62 @@
+{% extends 'booksystem/base.html' %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 30px">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-6 text-left">
+                                <h3 class="panel-title"><h1 style="font-family: '楷体', 'Arial', sans-serif; font-weight: bold; color: #f7fcf9e8;">欢迎订票！</h1></h3>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <a href="{% url 'booksystem:confirm_logout' %}" class="btn btn-xs btn-warning" style="font-size:16px; padding:10px 24px; margin-right:10px;">登出</a>
+                                <a href="{% url 'booksystem:ticket_record' %}" class="btn btn-xs btn-info" style="font-size:16px; padding:10px 24px;">订单记录</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post" action="{% url 'booksystem:search' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="id_start">
+                                    起点：
+                                </label>
+                                <div class="col-sm-7">
+                                    <input id="id_start" class="form-control" name="leave_city" type="text" placeholder="请输入出发地" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="id_end">
+                                    终点：
+                                </label>
+                                <div class="col-sm-7">
+                                    <input id="id_end" class="form-control" name="arrive_city" type="text" placeholder="请输入目的地" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="id_date">
+                                    时间：
+                                </label>
+                                <div class="col-sm-7">
+                                    <input id="id_date" class="form-control" name="leave_date" type="date" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-7">
+                                    <button type="submit" class="btn btn-primary btn-block">查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 设置默认日期为今天
+        document.getElementById('id_date').valueAsDate = new Date();
+    </script>
+{% endblock %}

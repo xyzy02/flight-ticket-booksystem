@@ -1,0 +1,119 @@
+{% extends 'booksystem/base.html' %}
+{% block content %}
+<div class="container" style="margin-top:30px;">
+    <div style="background: #f5f7fa; border-radius: 10px; padding: 18px 28px; margin-bottom: 25px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <span style="font-size: 2rem; color: #409eff; margin-right: 15px;">📝</span>
+        <h3 style="margin: 0; font-weight: 600; color: #333; letter-spacing: 2px;">填写购票信息</h3>
+    </div>
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    <form method="post" id="bookingForm">
+        {% csrf_token %}
+        <div id="passengersContainer">
+            <div class="passenger-form row" style="margin-bottom:10px;">
+                <div class="col-md-3">
+                    <label>身份证号：</label>
+                    <input type="text" name="id_card_1" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>姓名：</label>
+                    <input type="text" name="name_1" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label>舱位等级：</label>
+                    <select name="cabin_class_1" class="form-control" required>
+                        <option value="first">头等舱</option>
+                        <option value="economy">经济舱</option>
+                    </select>
+                </div>
+                <div class="col-md-2" style="margin-top:25px;">
+                    <button type="button" class="add-passenger btn btn-success btn-sm" title="添加购票人">添加乘客</button>
+                    <button type="button" class="remove-passenger btn btn-danger btn-sm" title="删除购票人" style="display:none;">－</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="passengerCount" name="passengerCount" value="1">
+        <div class="button-group" style="display: flex; gap: 30px; margin-top: 20px;">
+            <a href="{% url 'booksystem:result' %}" class="btn btn-outline-primary" style="background-color: #ff9822; color: #fff;">
+                返回
+            </a>
+            <button type="submit" class="btn btn-primary">确认</button>
+        </div>
+    </form>
+</div>
+
+<script>
+let passengerCount = 1;
+const MAX_PASSENGERS = 5;
+
+// 添加购票人
+document.getElementById('passengersContainer').addEventListener('click', function(e) {
+    if (e.target.classList.contains('add-passenger')) {
+        if (passengerCount >= MAX_PASSENGERS) {
+            alert('最多只能添加5位购票人');
+            return;
+        }
+        passengerCount++;
+        document.getElementById('passengerCount').value = passengerCount;
+        const newDiv = document.createElement('div');
+        newDiv.className = 'passenger-form row';
+        newDiv.style.marginBottom = '10px';
+        newDiv.innerHTML = `
+            <div class="col-md-3">
+                <label>身份证号：</label>
+                <input type="text" name="id_card_${passengerCount}" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <label>姓名：</label>
+                <input type="text" name="name_${passengerCount}" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <label>舱位等级：</label>
+                <select name="cabin_class_${passengerCount}" class="form-control" required>
+                    <option value="first">头等舱</option>
+                    <option value="economy">经济舱</option>
+                </select>
+            </div>
+            <div class="col-md-2" style="margin-top:25px;">
+                <button type="button" class="add-passenger btn btn-success btn-sm" title="添加购票人">添加乘客</button>
+                <button type="button" class="remove-passenger btn btn-danger btn-sm" title="删除购票人">－</button>
+            </div>
+        `;
+        document.getElementById('passengersContainer').appendChild(newDiv);
+        updateRemoveButtons();
+    }
+    // 删除购票人
+    if (e.target.classList.contains('remove-passenger')) {
+        if (passengerCount <= 1) return;
+        e.target.closest('.passenger-form').remove();
+        passengerCount--;
+        document.getElementById('passengerCount').value = passengerCount;
+        // 重新命名所有购票人字段
+        let forms = document.querySelectorAll('.passenger-form');
+        forms.forEach((form, idx) => {
+            let i = idx + 1;
+            form.querySelector('input[name^="id_card_"]').name = `id_card_${i}`;
+            form.querySelector('input[name^="name_"]').name = `name_${i}`;
+            form.querySelector('select[name^="cabin_class_"]').name = `cabin_class_${i}`;
+        });
+        updateRemoveButtons();
+    }
+});
+
+// 保证只有多于一行时才显示删除按钮
+function updateRemoveButtons() {
+    let forms = document.querySelectorAll('.passenger-form');
+    forms.forEach((form, idx) => {
+        let removeBtn = form.querySelector('.remove-passenger');
+        if (forms.length > 1) {
+            removeBtn.style.display = '';
+        } else {
+            removeBtn.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}
