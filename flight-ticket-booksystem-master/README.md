@@ -10,11 +10,8 @@
 
 ## 二、数据库初始化流程
 mysql:
-CREATE DATABASE IF NOT EXISTS `flightdb` /*!40100 DEFAULT CHARACTER 
-SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT 
-ENCRYPTION='N' */;
-USE `flightdb`;
-
+命令行启动mysql服务器，进入mysql环境：
+net start mysql
 ## 三、测试数据导入方法
 1. 运行flight.sql导入测试数据
 2. 额外数据导入方式：
@@ -26,8 +23,7 @@ USE `flightdb`;
 # 安装框架
 pip install Django==3.2.13
 # 数据库配置
-1. 启动本地MySQL并创建数据库
-2. 修改FlightTicket/settings.py中的"DATABASES"配置，需要填写数据库用户名和密码
+1. 修改FlightTicket/settings.py中的"DATABASES"配置，需要填写数据库用户名和密码
 # 数据库迁移
 python manage.py makemigrations
 python manage.py migrate
