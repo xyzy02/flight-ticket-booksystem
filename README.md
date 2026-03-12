@@ -13,7 +13,7 @@ mysql:
 命令行启动mysql服务器，进入mysql环境：
 net start mysql
 ## 三、测试数据导入方法
-1. 运行flight.sql导入测试数据
+1. 运行flight.sql导入了测试数据
 2. 额外数据导入方式：
    - 管理员后台手动录入（默认初始账号：admin，密码：admin123）
    - 使用MySQL语句直接插入
